@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { DigiFormInputSearch, DigiLayoutContainer } from "@digi/arbetsformedlingen-react";
 import { SortingDropdown } from "./SortingDropdown";
+import { SortingCheckbox } from "./SortingCheckbox";
 
 type FilterProps = {
   query: string;
@@ -57,6 +58,22 @@ export const FilterAndSearchJobs = ({ setQuery}: FilterProps) => {
     navigate(`/search?${usp.toString()}`, { replace: true });
   };
 
+  const handleChecking = (checkQuery?: string) => {
+    const usp = new URLSearchParams(location.search);
+
+    if (checkQuery) {
+      // Clean leading ? or & if any
+      const cleaned = checkQuery.replace(/^\?&?/, "");
+      // Extract value of sort param
+      const value = new URLSearchParams(cleaned).get("sort");
+      if (value) usp.set("sort", value);
+    } else {
+      usp.delete("sort");
+    }
+
+    navigate(`/search?${usp.toString()}`, { replace: true });
+  };
+
   return (
     <DigiLayoutContainer afNoGutter afMarginTop> 
       <form
@@ -77,6 +94,7 @@ export const FilterAndSearchJobs = ({ setQuery}: FilterProps) => {
       </form>
 
       <SortingDropdown onSort={handleSorting} />
+      <SortingCheckbox onCheck={handleChecking} />
     </DigiLayoutContainer>
   );
 }
