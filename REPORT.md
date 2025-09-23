@@ -46,18 +46,20 @@ Er slutprodukt ska ej innehålla Arbetsförmedlingens logga eller färger. Anpas
 - C:\Work\AssignmentCorrector\backend\repos\fed24d-case-af-jobtech-group-3-1\src\services\popularJobsService.ts - null - Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any').
 
 ## 🏆 **Betyg: VG**
-📌 **Motivering:** Uppgiften uppfyller samtliga G‑krav och levererar dessutom flera extra delar. Data hämtas strukturerat via fetch i en tjänstelager-uppdelning (serviceBase, jobService, popularJobsService). React‑koncept används tydligt: routing (React Router), state, context (SavedJobsContext), samt en egen custom hook (useJobsSearch). Designsystemet används konsekvent (Digi‑komponenter) och färgpaletten/logotyp är anpassade bort från AF:s profil. Söksidan har sortering och platsfilter som synkar med URL, pagination och laddnings-/felstatus. Startsidans grafer (DigiBarChart) ger grafisk presentation av data. Kodstrukturen är i huvudsak ren och läsbar, med bra uppdelning i komponenter och tjänster.
+📌 **Motivering:** Uppgiften uppfyller samtliga G-krav och levererar flera bonusdelar på ett välstrukturerat sätt. Data hämtas via fetch i en tydlig tjänstelager-uppdelning (serviceBase, jobService, popularJobsService). React-koncept används korrekt (routing, context för sparade jobb, state, custom hook för sökning). Designsystemet används genomgående och Arbetsförmedlingens logotyp/färger är borttagna/överskrivna med egen palett. Extra: grafisk presentation (DigiBarChart), sorting, platsfilter (facetter), samt en robust detaljsida med cache i localStorage.
 
 💡 **Förbättringsförslag:**  
-- serviceBase: kontrollera response.ok och kasta tydligare felmeddelanden baserat på HTTP‑status. Hantera även nätverksfel med try/catch, annars kan response.json() kasta.
-- AdPage: bug i felhanteringen (if (error || !job) return;) resulterar i tomt innehåll. Visa ett felmeddelande eller en tydlig fallback‑vy istället.
-- Navigation: ersätt rena <a href> i Header med React Router‑länkar (Link) eller DigiLinkInternal med afOverrideLink för att undvika full sidladdning. Använd useLocation istället för window.location för aktiv menyindikering.
-- Pagination och URL: lägg till sidnummer i URL:en (t.ex. ?page=2) och nollställ sidan till 1 när ny sökterm sätts. Då blir delning/refresh mer förutsägbart.
-- Typer: undvik any i event‑handlers (t.ex. DigiFormInputSearch och ContextMenu). Beskriv Digi‑komponenternas CustomEvent‑typer eller skapa egna type guards.
-- Rensa konsolloggar och död kod: ta bort console.log samt den tomma App‑komponenten som renderas parallellt med RouterProvider.
-- DRY: joinUrl finns duplicerad på flera ställen – extrahera till en gemensam util.
-- Nice‑to‑have att överväga: implementera autocomplete via /complete, samt ev. styled-components som utnyttjar designsystemets tokens.
-- UI/förbättringar: visa valda platsfilter i triggern (t.ex. "Efter plats: Stockholm"), visa antal i menyn och/eller fler orter, samt förbättra texternas stavning på SavedJobsPage.
+- Implementera /complete-endpointen för autocomplete i sökfältet för ytterligare bonus.
+- Förbättra felhanteringen i nätverksanrop: kontrollera response.ok och kasta tydligare fel; hantera timeouts/AbortController.
+- Nollställ pagination (page = 1) när q/sort/filter ändras, annars riskerar man tomma sidor p.g.a. förskjuten offset.
+- Rensa console.log och överflödiga eslint-disable any; typa händelser korrekt (t.ex. CustomEvent<number>) och Digi-komponenternas onChange.
+- Headern använder <a href> vilket ger full sidladdning; byt till <Link> från react-router för SPA-navigering.
+- AdPage: undvik att returnera undefined vid fel (if (error || !job) return;). Visa ett användbart felmeddelande eller navigera till NotFound.
+- Parallellisera hämtningar i JobData (Promise.all) så stapeldiagrammet laddar snabbare.
+- Harmoniera query-hanteringen: använd useSearchParams som single source of truth i SearchPage och låt hooken bygga query från URL-parametrar i stället för att mixa location.search och ett separat query-state.
+- Tillgänglighet i platsmenyn: hantera fokus när menyn öppnas, piltangenter för navigation och enter/space för val; nu finns aria-attribut men interaktionen kan stärkas.
+- Ta bort oanvänd App-komponent som renderas tom i main.tsx.
+- Språk/typo i sparade-jobb-texten (”saidan”, ”bärja”) – rätta stavfel.
 
 ## 👥 Gruppbidrag
 
