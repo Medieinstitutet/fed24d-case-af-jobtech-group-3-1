@@ -46,21 +46,18 @@ Er slutprodukt ska ej innehålla Arbetsförmedlingens logga eller färger. Anpas
 - C:\Work\AssignmentCorrector\backend\repos\fed24d-case-af-jobtech-group-3-1\src\services\popularJobsService.ts - null - Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-explicit-any').
 
 ## 🏆 **Betyg: VG**
-📌 **Motivering:** Uppgiften uppfyller G-kraven med god marginal: data hämtas strukturerat via fetch (serviceBase), ni har tydliga tjänster (jobService, popularJobsService), ni använder React-koncept (routing, state, context, custom hook) och designsystemet för presentation. Ni har dessutom levererat flera bonusar: grafisk presentation (DigiBarChart), en custom hook för sökningen, sortering och platsfilter, sparade jobb via Context + localStorage och en genomtänkt färgpalett där AF-loggan döljs. Helheten är välstrukturerad och funktionell.
+📌 **Motivering:** Uppgiften uppfyller samtliga G‑krav och levererar dessutom flera extra delar. Data hämtas strukturerat via fetch i en tjänstelager-uppdelning (serviceBase, jobService, popularJobsService). React‑koncept används tydligt: routing (React Router), state, context (SavedJobsContext), samt en egen custom hook (useJobsSearch). Designsystemet används konsekvent (Digi‑komponenter) och färgpaletten/logotyp är anpassade bort från AF:s profil. Söksidan har sortering och platsfilter som synkar med URL, pagination och laddnings-/felstatus. Startsidans grafer (DigiBarChart) ger grafisk presentation av data. Kodstrukturen är i huvudsak ren och läsbar, med bra uppdelning i komponenter och tjänster.
 
 💡 **Förbättringsförslag:**  
-- Korrigera felhantering/återgivning på annons-sidan: i AdPage returnerar koden inget vid fel (if (error || !job) return;) vilket ger en tom sida. Visa ett tydligt felmeddelande eller en NotFound-komponent.
-- Byt <a>-länkar i Header till React Router-länkar (Link/DigiLinkInternal) så ni undviker full sidladdning och bevarar SPA-upplevelsen. Då uppdateras även aktiv navigering korrekt utan att läsa av window.location manuellt.
-- Förbättra typerna i Job-modellen: många fält (skills/languages/work_experiences/education) är definierade som tupler ([]) i stället för arrayer (Type[]). Detta kan leda till märkliga typfel och sämre DX. Exempel: must_have.skills: Skill[] i stället för en tuple.
-- Undvik any och eslint-disable där det går. Typa onChange/onAfOnClick-event korrekt (t.ex. React.ChangeEvent<HTMLInputElement> eller CustomEvent enligt komponenternas API).
-- Förbättra fetch-felhantering i serviceBase.get: kontrollera response.ok och kasta ett fel med status/text. I dag försöker ni alltid parsa JSON, vilket kan dölja fel från API:et.
-- Rensa debug-utskrifter (console.log) innan leverans.
-- Återställ sida till 1 när sökparametrar ändras (t.ex. när q, sort eller filters ändras). Annars kan man hamna på en tom sida vid ny sökning.
-- Duplicerad joinUrl-funktion förekommer i flera filer. Extrahera till en gemensam util för att undvika divergens och underlätta testning.
-- Parallellisera hämtningarna i JobData med Promise.all så laddningen går snabbare (nu sker anropen sekventiellt).
-- Säkerställ att import-sökvägen till tokens är korrekt: ./style/tokens.css (utan avslutande snedstreck) för att undvika plattformsproblem.
-- Överväg att lägga plats-facets-hämtningen (LocationDropdown) i en service i stället för direkt i komponenten, för konsekvens med övrig datahämtning.
-- Bonusmöjlighet: implementera /complete för autocomplete i sökfältet (enligt Nice-to-have).
+- serviceBase: kontrollera response.ok och kasta tydligare felmeddelanden baserat på HTTP‑status. Hantera även nätverksfel med try/catch, annars kan response.json() kasta.
+- AdPage: bug i felhanteringen (if (error || !job) return;) resulterar i tomt innehåll. Visa ett felmeddelande eller en tydlig fallback‑vy istället.
+- Navigation: ersätt rena <a href> i Header med React Router‑länkar (Link) eller DigiLinkInternal med afOverrideLink för att undvika full sidladdning. Använd useLocation istället för window.location för aktiv menyindikering.
+- Pagination och URL: lägg till sidnummer i URL:en (t.ex. ?page=2) och nollställ sidan till 1 när ny sökterm sätts. Då blir delning/refresh mer förutsägbart.
+- Typer: undvik any i event‑handlers (t.ex. DigiFormInputSearch och ContextMenu). Beskriv Digi‑komponenternas CustomEvent‑typer eller skapa egna type guards.
+- Rensa konsolloggar och död kod: ta bort console.log samt den tomma App‑komponenten som renderas parallellt med RouterProvider.
+- DRY: joinUrl finns duplicerad på flera ställen – extrahera till en gemensam util.
+- Nice‑to‑have att överväga: implementera autocomplete via /complete, samt ev. styled-components som utnyttjar designsystemets tokens.
+- UI/förbättringar: visa valda platsfilter i triggern (t.ex. "Efter plats: Stockholm"), visa antal i menyn och/eller fler orter, samt förbättra texternas stavning på SavedJobsPage.
 
 ## 👥 Gruppbidrag
 
